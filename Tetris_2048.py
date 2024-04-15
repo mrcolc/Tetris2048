@@ -40,8 +40,6 @@ def start():
 
     # the main game loop
     while True:
-        # handling the floating tiles and do merge
-        grid.merge_tiles()
         # check for any user interaction via the keyboard
         if stddraw.hasNextKeyTyped():  # check if the user has pressed a key
             key_typed = stddraw.nextKeyTyped()  # the most recently pressed key
@@ -59,7 +57,7 @@ def start():
                 # (soft drop: causes the tetromino to fall down faster)
                 current_tetromino.move(key_typed, grid)
             elif key_typed == "space":
-                current_tetromino.rotate_clockwise()
+                current_tetromino.rotate_clockwise(grid)
             # clear the queue of the pressed keys for a smoother interaction
             stddraw.clearKeysTyped()
 
@@ -83,6 +81,8 @@ def start():
 
         # display the game grid with the current tetromino
         grid.display()
+        # handling the floating tiles and do merge
+        grid.merge_tiles()
 
     # print a message on the console when the game is over
     print("Game over")
