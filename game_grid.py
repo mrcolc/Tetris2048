@@ -133,7 +133,7 @@ class GameGrid:
                         # Merge the tiles
                         self.tile_matrix[row][col].number *= 2
 
-                        merged_tile_num = self.tile_matrix[row + 1][col]
+                        merged_tile_num = self.tile_matrix[row][col]
                         if merged_tile_num == 4:
                             self.current_tile.background_color = Color(236, 224, 200)
                         elif merged_tile_num == 8:
