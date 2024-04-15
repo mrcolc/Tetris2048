@@ -22,10 +22,10 @@ class GameGrid:
         # the game_over flag shows whether the game is over or not
         self.game_over = False
         # set the color used for the empty grid cells
-        self.empty_cell_color = Color(206,195,181)
+        self.empty_cell_color = Color(206, 195, 181)
         # set the colors used for the grid lines and the grid boundaries
-        self.line_color = Color(187,174,161)
-        self.boundary_color = Color(132,122,113)
+        self.line_color = Color(187, 174, 161)
+        self.boundary_color = Color(132, 122, 113)
         # thickness values used for the grid lines and the grid boundaries
         self.line_thickness = 0.002
         self.box_thickness = 10 * 0.001
@@ -143,28 +143,28 @@ class GameGrid:
                             self.tile_matrix[row][col].set_background_color(Color(243, 177, 121))
                             self.tile_matrix[row][col].set_foreground_color(Color(255, 255, 255))
                         elif merged_tile_num == 16:
-                            self.tile_matrix[row][col].set_background_color(Color(245,149,99))
+                            self.tile_matrix[row][col].set_background_color(Color(245, 149, 99))
                             self.tile_matrix[row][col].set_foreground_color(Color(255, 255, 255))
                         elif merged_tile_num == 32:
                             self.tile_matrix[row][col].set_background_color(Color(249,123,98))
                             self.tile_matrix[row][col].set_foreground_color(Color(255, 255, 255))
                         elif merged_tile_num == 64:
-                            self.tile_matrix[row][col].set_background_color(Color(246,93,59))
+                            self.tile_matrix[row][col].set_background_color(Color(246, 93, 59))
                             self.tile_matrix[row][col].set_foreground_color(Color(255, 255, 255))
                         elif merged_tile_num == 128:
-                            self.tile_matrix[row][col].set_background_color(Color(238,203,102))
+                            self.tile_matrix[row][col].set_background_color(Color(238, 203, 102))
                             self.tile_matrix[row][col].set_foreground_color(Color(255, 255, 255))
                         elif merged_tile_num == 256:
-                            self.tile_matrix[row][col].set_background_color(Color(237,204,99))
+                            self.tile_matrix[row][col].set_background_color(Color(237, 204, 99))
                             self.tile_matrix[row][col].set_foreground_color(Color(255, 255, 255))
                         elif merged_tile_num == 512:
-                            self.tile_matrix[row][col].set_background_color(Color(239,202,88))
+                            self.tile_matrix[row][col].set_background_color(Color(239, 202, 88))
                             self.tile_matrix[row][col].set_foreground_color(Color(255, 255, 255))
                         elif merged_tile_num == 1024:
-                            self.tile_matrix[row][col].set_background_color(Color(237,198,67))
+                            self.tile_matrix[row][col].set_background_color(Color(237, 198, 67))
                             self.tile_matrix[row][col].set_foreground_color(Color(255, 255, 255))
                         elif merged_tile_num == 2048:
-                            self.tile_matrix[row][col].set_background_color(Color(237,198,67))
+                            self.tile_matrix[row][col].set_background_color(Color(237, 198, 67))
                             self.tile_matrix[row][col].set_foreground_color(Color(255, 255, 255))
                         elif merged_tile_num == 4096:
                             self.tile_matrix[row][col].set_background_color(Color(61,58,51))
@@ -178,7 +178,7 @@ class GameGrid:
         for col in range(self.grid_width):
             for row in range(self.grid_height - 1):
                 if self.tile_matrix[row][col] is None:
-                    # Move tiles down to fill the empty space
+                    # Move tiles up to fill the empty space
                     for r in range(row, self.grid_height - 1):
                         self.tile_matrix[r][col] = self.tile_matrix[r + 1][col]
                     self.tile_matrix[self.grid_height - 1][col] = None  # Set the bottom tile as None

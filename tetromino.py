@@ -206,13 +206,35 @@ class Tetromino:
         # if this method does not end by returning False before this line
         return True  # this tetromino can be moved in the given direction
 
-    def rotate_clockwise(self):
-        n = len(self.tile_matrix)  # n = number of rows = number of columns
-        rotated_matrix = np.full((n, n), None)  # create a new matrix for rotated tiles
-        for row in range(n):
-            for col in range(n):
-                rotated_matrix[col][n - 1 - row] = self.tile_matrix[row][col]
-        self.tile_matrix = rotated_matrix
+    def can_be_rotated(self, game_grid):
+        # Create a copy of the tile matrix
+        temp_tile_matrix = np.copy(self.tile_matrix)
+
+        # Rotate the copied matrix
+        rotated_matrix = np.rot90(temp_tile_matrix)
+
+        # Check if the rotated position is valid
+        for row in range(len(rotated_matrix)):
+            for col in range(len(rotated_matrix)):
+                if rotated_matrix[row][col] is not None:
+                    # Get the position of the cell after rotation
+                    position = self.get_cell_position(row, col)
+                    # Check if the rotated position is within the game grid and not occupied
+                    if position.x < 0 or position.x >= Tetromino.grid_width \
+                            or position.y < 0 or position.y >= Tetromino.grid_height \
+                            or game_grid.is_occupied(position.y, position.x):
+                        return False  # Rotation is not possible
+
+        return True  # Rotation is possible
+
+    def rotate_clockwise(self,grid):
+        if(self.can_be_rotated(grid)):
+            n = len(self.tile_matrix)  # n = number of rows = number of columns
+            rotated_matrix = np.full((n, n), None)  # create a new matrix for rotated tiles
+            for row in range(n):
+                for col in range(n):
+                    rotated_matrix[col][n - 1 - row] = self.tile_matrix[row][col]
+            self.tile_matrix = rotated_matrix
 
     # A method for rotating the tetromino counterclockwise
     def rotate_counterclockwise(self):
