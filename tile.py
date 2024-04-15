@@ -25,6 +25,14 @@ class Tile:
         self.foreground_color = Color(0, 0, 0)  # foreground (number) color
         self.box_color = Color(141,131,121)  # box (boundary) color
 
+    # a method to change color of the background
+    def set_background_color(self, color):
+        self.background_color = color
+
+    # a method to change color of the foreground
+    def set_foreground_color(self, color):
+        self.foreground_color = color
+
     # A method for drawing this tile at a given position with a given length
     def draw(self, position, length=1):  # length defaults to 1
         # draw the tile as a filled square
