@@ -17,7 +17,7 @@ class Tetromino:
 
         # define colors for each shape
         colors = {
-            'I': Color(255, 0, 1),  # Red for I shape
+            'I': Color(255, 0, 0),  # Red for I shape
             'O': Color(0, 255, 0),  # Green for O shape
             'Z': Color(0, 0, 255),  # Blue for Z shape
             'J': Color(0, 255, 255),
