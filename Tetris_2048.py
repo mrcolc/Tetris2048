@@ -40,6 +40,7 @@ def start():
 
     # the main game loop
     while True:
+        # handling the floating tiles and do merge
         grid.merge_tiles()
         # check for any user interaction via the keyboard
         if stddraw.hasNextKeyTyped():  # check if the user has pressed a key
