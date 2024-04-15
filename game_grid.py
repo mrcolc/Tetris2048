@@ -20,13 +20,13 @@ class GameGrid:
         # the game_over flag shows whether the game is over or not
         self.game_over = False
         # set the color used for the empty grid cells
-        self.empty_cell_color = Color(42, 69, 99)
+        self.empty_cell_color = Color(206,195,181)
         # set the colors used for the grid lines and the grid boundaries
-        self.line_color = Color(0, 100, 200)
-        self.boundary_color = Color(0, 100, 200)
+        self.line_color = Color(187,174,161)
+        self.boundary_color = Color(132,122,113)
         # thickness values used for the grid lines and the grid boundaries
         self.line_thickness = 0.002
-        self.box_thickness = 10 * self.line_thickness
+        self.box_thickness = 10 * 0.001
 
     # A method for displaying the game grid
     def display(self):
@@ -132,6 +132,41 @@ class GameGrid:
                     if self.tile_matrix[row][col].number == self.tile_matrix[row + 1][col].number:
                         # Merge the tiles
                         self.tile_matrix[row][col].number *= 2
+
+                        merged_tile_num = self.tile_matrix[row][col]
+                        if merged_tile_num == 4:
+                            self.current_tile.background_color = Color(236, 224, 200)
+                        elif merged_tile_num == 8:
+                            self.background_color = Color(243, 177, 121)
+                            self.foreground_color = Color(255, 255, 255)
+                        elif merged_tile_num == 16:
+                            self.background_color = Color(245,149,99)
+                            self.foreground_color = Color(255, 255, 255)
+                        elif merged_tile_num == 32:
+                            self.background_color = Color(249,123,98)
+                            self.foreground_color = Color(255, 255, 255)
+                        elif merged_tile_num == 64:
+                            self.background_color = Color(246,93,59)
+                            self.foreground_color = Color(255, 255, 255)
+                        elif merged_tile_num == 128:
+                            self.background_color = Color(238,203,102)
+                            self.foreground_color = Color(255, 255, 255)
+                        elif merged_tile_num == 256:
+                            self.background_color = Color(237,204,99)
+                            self.foreground_color = Color(255, 255, 255)
+                        elif merged_tile_num == 512:
+                            self.background_color = Color(239,202,88)
+                            self.foreground_color = Color(255, 255, 255)
+                        elif merged_tile_num == 1024:
+                            self.background_color = Color(237,198,67)
+                            self.foreground_color = Color(255, 255, 255)
+                        elif merged_tile_num == 2048:
+                            self.background_color = Color(237,198,67)
+                            self.foreground_color = Color(255, 255, 255)
+                        elif merged_tile_num == 4096:
+                            self.background_color = Color(61,58,51)
+                            self.foreground_color = Color(255, 255, 255)
+
                         self.tile_matrix[row + 1][col] = None
                         # Update score
                         score += 2 * self.tile_matrix[row][col].number  # Example scoring mechanism

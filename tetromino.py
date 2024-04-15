@@ -15,17 +15,6 @@ class Tetromino:
     def __init__(self, shape):
         self.type = shape  # set the type of this tetromino
 
-        # define colors for each shape
-        colors = {
-            'I': Color(255, 0, 0),  # Red for I shape
-            'O': Color(0, 255, 0),  # Green for O shape
-            'Z': Color(0, 0, 255),  # Blue for Z shape
-            'J': Color(0, 255, 255),
-            'L': Color(255, 255, 0),
-            'S': Color(255, 0, 255),
-            'T': Color(255, 0, 0)
-
-        }
         # determine the occupied (non-empty) cells in the tile matrix based on
         # the shape of this tetromino (see the documentation given with this code)
         occupied_cells = []
@@ -84,7 +73,6 @@ class Tetromino:
             col_index, row_index = occupied_cells[i][0], occupied_cells[i][1]
             # create a tile for each occupied cell of this tetromino
             new_tile = Tile()
-            new_tile.background_color = colors[self.type]
             self.tile_matrix[row_index][col_index] = new_tile
         # initialize the position of this tetromino (as the bottom left cell in
         # the tile matrix) with a random horizontal position above the game grid
