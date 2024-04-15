@@ -1,3 +1,5 @@
+from django.db.models.expressions import Col
+
 import lib.stddraw as stddraw  # used for displaying the game grid
 from lib.color import Color  # used for coloring the game grid
 from point import Point  # used for tile positions
@@ -133,39 +135,39 @@ class GameGrid:
                         # Merge the tiles
                         self.tile_matrix[row][col].number *= 2
 
-                        merged_tile_num = self.tile_matrix[row][col]
+                        merged_tile_num = self.tile_matrix[row][col].number
                         if merged_tile_num == 4:
-                            self.current_tile.background_color = Color(236, 224, 200)
+                            self.tile_matrix[row][col].set_background_color(Color(236, 224, 200))
                         elif merged_tile_num == 8:
-                            self.background_color = Color(243, 177, 121)
-                            self.foreground_color = Color(255, 255, 255)
+                            self.tile_matrix[row][col].set_background_color(Color(243, 177, 121))
+                            self.tile_matrix[row][col].set_foreground_color(Color(255, 255, 255))
                         elif merged_tile_num == 16:
-                            self.background_color = Color(245,149,99)
-                            self.foreground_color = Color(255, 255, 255)
+                            self.tile_matrix[row][col].set_background_color(Color(245,149,99))
+                            self.tile_matrix[row][col].set_foreground_color(Color(255, 255, 255))
                         elif merged_tile_num == 32:
-                            self.background_color = Color(249,123,98)
-                            self.foreground_color = Color(255, 255, 255)
+                            self.tile_matrix[row][col].set_background_color(Color(249,123,98))
+                            self.tile_matrix[row][col].set_foreground_color(Color(255, 255, 255))
                         elif merged_tile_num == 64:
-                            self.background_color = Color(246,93,59)
-                            self.foreground_color = Color(255, 255, 255)
+                            self.tile_matrix[row][col].set_background_color(Color(246,93,59))
+                            self.tile_matrix[row][col].set_foreground_color(Color(255, 255, 255))
                         elif merged_tile_num == 128:
-                            self.background_color = Color(238,203,102)
-                            self.foreground_color = Color(255, 255, 255)
+                            self.tile_matrix[row][col].set_background_color(Color(238,203,102))
+                            self.tile_matrix[row][col].set_foreground_color(Color(255, 255, 255))
                         elif merged_tile_num == 256:
-                            self.background_color = Color(237,204,99)
-                            self.foreground_color = Color(255, 255, 255)
+                            self.tile_matrix[row][col].set_background_color(Color(237,204,99))
+                            self.tile_matrix[row][col].set_foreground_color(Color(255, 255, 255))
                         elif merged_tile_num == 512:
-                            self.background_color = Color(239,202,88)
-                            self.foreground_color = Color(255, 255, 255)
+                            self.tile_matrix[row][col].set_background_color(Color(239,202,88))
+                            self.tile_matrix[row][col].set_foreground_color(Color(255, 255, 255))
                         elif merged_tile_num == 1024:
-                            self.background_color = Color(237,198,67)
-                            self.foreground_color = Color(255, 255, 255)
+                            self.tile_matrix[row][col].set_background_color(Color(237,198,67))
+                            self.tile_matrix[row][col].set_foreground_color(Color(255, 255, 255))
                         elif merged_tile_num == 2048:
-                            self.background_color = Color(237,198,67)
-                            self.foreground_color = Color(255, 255, 255)
+                            self.tile_matrix[row][col].set_background_color(Color(237,198,67))
+                            self.tile_matrix[row][col].set_foreground_color(Color(255, 255, 255))
                         elif merged_tile_num == 4096:
-                            self.background_color = Color(61,58,51)
-                            self.foreground_color = Color(255, 255, 255)
+                            self.tile_matrix[row][col].set_background_color(Color(61,58,51))
+                            self.tile_matrix[row][col].set_foreground_color(Color(255, 255, 255))
 
                         self.tile_matrix[row + 1][col] = None
                         # Update score
