@@ -72,6 +72,7 @@ class GameGrid:
 
     # A method to draw right panel
     def draw_right_panel(self):
+        # set pen color
         stddraw.setPenColor(Color(167, 160, 151))
         stddraw.filledRectangle(11.5, -0.5, 4, self.grid_height)
 
