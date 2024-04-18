@@ -227,8 +227,8 @@ class Tetromino:
 
         return True  # Rotation is possible
 
-    def rotate_clockwise(self,grid):
-        if(self.can_be_rotated(grid)):
+    def rotate_clockwise(self, grid):
+        if (self.can_be_rotated(grid)):
             n = len(self.tile_matrix)  # n = number of rows = number of columns
             rotated_matrix = np.full((n, n), None)  # create a new matrix for rotated tiles
             for row in range(n):

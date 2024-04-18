@@ -18,10 +18,10 @@ def start():
     # set the dimensions of the game grid
     grid_h, grid_w = 20, 12
     # set the size of the drawing canvas (the displayed window)
-    canvas_h, canvas_w = 40 * grid_h, 40 * grid_w + 100
+    canvas_h, canvas_w = 40 * grid_h, 40 * grid_w + 110
     stddraw.setCanvasSize(canvas_w, canvas_h)
     # set the scale of the coordinate system for the drawing canvas
-    stddraw.setXscale(-0.5, grid_w - 0.5 + 3)
+    stddraw.setXscale(-0.5, grid_w - 0.5 + 4)
     stddraw.setYscale(-0.5, grid_h - 0.5)
 
     # set the game grid dimension values stored and used in the Tetromino class
@@ -33,6 +33,8 @@ def start():
     # by using the create_tetromino function defined below
     current_tetromino = create_tetromino()
     grid.current_tetromino = current_tetromino
+    next_tetromino = create_tetromino()
+    grid.next_tetromino = next_tetromino
 
     # display a simple menu before opening the game
     # by using the display_game_menu function defined below
@@ -63,6 +65,7 @@ def start():
 
         # move the active tetromino down by one at each iteration (auto fall)
         success = current_tetromino.move("down", grid)
+
         # lock the active tetromino onto the grid when it cannot go down anymore
         if not success:
             # get the tile matrix of the tetromino without empty rows and columns
@@ -70,19 +73,20 @@ def start():
             tiles, pos = current_tetromino.get_min_bounded_tile_matrix(True)
             # update the game grid by locking the tiles of the landed tetromino
             game_over = grid.update_grid(tiles, pos)
-
             # end the main game loop if the game is over
             if game_over:
                 break
             # create the next tetromino to enter the game grid
             # by using the create_tetromino function defined below
-            current_tetromino = create_tetromino()
-            grid.current_tetromino = current_tetromino
+            current_tetromino = next_tetromino
+            grid.current_tetromino = next_tetromino
+            next_tetromino = create_tetromino()
+            grid.next_tetromino = next_tetromino
 
         # display the game grid with the current tetromino
         grid.display()
-        # handling the floating tiles and do merge
         grid.merge_tiles()
+        grid.clear_rows()
 
     # print a message on the console when the game is over
     print("Game over")
@@ -97,7 +101,6 @@ def create_tetromino():
     # create and return the tetromino
     tetromino = Tetromino(random_type)
     return tetromino
-
 
 # A function for displaying a simple menu before starting the game
 def display_game_menu(grid_height, grid_width):

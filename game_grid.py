@@ -19,6 +19,8 @@ class GameGrid:
         self.tile_matrix = np.full((grid_h, grid_w), None)
         # create the tetromino that is currently being moved on the game grid
         self.current_tetromino = None
+        # create the next tetromino
+        self.next_tetromino = None
         # the game_over flag shows whether the game is over or not
         self.game_over = False
         # set the color used for the empty grid cells
@@ -29,7 +31,7 @@ class GameGrid:
         # thickness values used for the grid lines and the grid boundaries
         self.line_thickness = 0.002
         self.box_thickness = 10 * 0.001
-
+    
     # A method for displaying the game grid
     def display(self):
         # clear the background to empty_cell_color
@@ -42,6 +44,7 @@ class GameGrid:
             self.current_tetromino.draw()
         # draw a box around the game grid
         self.draw_boundaries()
+        self.draw_right_panel()
         # show the resulting drawing with a pause duration = 250 ms
         stddraw.show(250)
 
@@ -65,6 +68,34 @@ class GameGrid:
         for y in np.arange(start_y + 1, end_y, 1):  # horizontal inner lines
             stddraw.line(start_x, y, end_x, y)
         stddraw.setPenRadius()  # reset the pen radius to its default value
+
+    # A method to draw right panel
+    def draw_right_panel(self):
+        stddraw.setPenColor(Color(167, 160, 151))
+        stddraw.filledRectangle(11.5, -0.5, 4, self.grid_height)
+
+        stddraw.setPenColor(Color(255, 255, 255))
+        stddraw.setFontSize(35)
+        stddraw.setFontFamily("Arial Bold")
+        stddraw.text(13.5, 4.5, "NEXT")
+        stddraw.text(13.5, 18, "SCORE")
+
+        n = len(self.next_tetromino.tile_matrix)
+
+        for row in range(n):
+            for col in range(n):
+                if self.next_tetromino.tile_matrix[row][col] is not None:
+                    position = self.get_right_cell_position(row, col)
+                    self.next_tetromino.tile_matrix[row][col].draw(position)
+
+    def get_right_cell_position(self, row, col):
+        n = len(self.tile_matrix)  # n = number of rows = number of columns
+        position = Point()
+        # horizontal position of the cell
+        position.x = 12.75 + col
+        # vertical position of the cell
+        position.y = 3.5 - row
+        return position
 
     # A method for drawing the boundaries around the game grid
     def draw_boundaries(self):
@@ -121,7 +152,35 @@ class GameGrid:
         # return the value of the game_over flag
         return self.game_over
 
-    # A method to merge tiles vertically on the game grid and update the score
+    # A method to clear full rows
+    def clear_rows(self):
+        rows_to_clear = []
+
+        # Check for full rows and add them to rows_to_clear
+        for row in range(self.grid_height):
+            if all(self.tile_matrix[row]):
+                rows_to_clear.append(row)
+
+        # Clear full rows and add their sum to the score
+        for row in rows_to_clear:
+            row_sum = sum(tile.number for tile in self.tile_matrix[row])
+            # self.score += row_sum
+            self.tile_matrix[row] = [None] * self.grid_width  # Clear the row
+
+            for col in range(self.grid_width):
+                for r in range(row, self.grid_height - 1):
+                    self.tile_matrix[r][col] = self.tile_matrix[r + 1][col]
+
+    # A method to handle free tiles
+    def handle_free_tiles(self, col, row):
+        for col in range(self.grid_width - 1):
+            for row in range(self.grid_height - 1):
+                if self.tile_matrix[row][col] is None:
+                    if (((col == 0 and self.tile_matrix[row + 1][col - 1] is None) or (
+                            col == self.grid_width - 1 and self.tile_matrix[row + 1][col + 1] is None)) or
+                            (self.tile_matrix[row + 1][col] is not None)):
+                        self.tile_matrix[row][col] = self.tile_matrix[row + 1][col]
+                        self.tile_matrix[row + 1][col] = None
 
     # A method to merge tiles vertically on the game grid and update the score
     def merge_tiles(self):
@@ -146,7 +205,7 @@ class GameGrid:
                             self.tile_matrix[row][col].set_background_color(Color(245, 149, 99))
                             self.tile_matrix[row][col].set_foreground_color(Color(255, 255, 255))
                         elif merged_tile_num == 32:
-                            self.tile_matrix[row][col].set_background_color(Color(249,123,98))
+                            self.tile_matrix[row][col].set_background_color(Color(249, 123, 98))
                             self.tile_matrix[row][col].set_foreground_color(Color(255, 255, 255))
                         elif merged_tile_num == 64:
                             self.tile_matrix[row][col].set_background_color(Color(246, 93, 59))
@@ -167,32 +226,9 @@ class GameGrid:
                             self.tile_matrix[row][col].set_background_color(Color(237, 198, 67))
                             self.tile_matrix[row][col].set_foreground_color(Color(255, 255, 255))
                         elif merged_tile_num == 4096:
-                            self.tile_matrix[row][col].set_background_color(Color(61,58,51))
+                            self.tile_matrix[row][col].set_background_color(Color(61, 58, 51))
                             self.tile_matrix[row][col].set_foreground_color(Color(255, 255, 255))
 
                         self.tile_matrix[row + 1][col] = None
                         # Update score
                         score += 2 * self.tile_matrix[row][col].number  # Example scoring mechanism
-
-        # Remove free tiles and update the score
-        for col in range(self.grid_width):
-            for row in range(self.grid_height - 1):
-                if self.tile_matrix[row][col] is None:
-                    # Move tiles up to fill the empty space
-                    for r in range(row, self.grid_height - 1):
-                        self.tile_matrix[r][col] = self.tile_matrix[r + 1][col]
-                    self.tile_matrix[self.grid_height - 1][col] = None  # Set the bottom tile as None
-                    # Add the value of the moved tile to the score
-                    if self.tile_matrix[row + 1][col] is not None:
-                        score += self.tile_matrix[row + 1][col].number
-
-        # Check for full rows and add them to rows_to_clear
-        for row in range(self.grid_height):
-            if all(self.tile_matrix[row]):
-                rows_to_clear.append(row)
-
-        # Clear full rows and add their sum to the score
-        for row in rows_to_clear:
-            row_sum = sum(tile.number for tile in self.tile_matrix[row])
-            score += row_sum
-            self.tile_matrix[row] = [None] * self.grid_width  # Clear the row
