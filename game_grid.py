@@ -44,6 +44,7 @@ class GameGrid:
             self.current_tetromino.draw()
         # draw a box around the game grid
         self.draw_boundaries()
+        # draw the right panel
         self.draw_right_panel()
         # show the resulting drawing with a pause duration = 250 ms
         stddraw.show(250)
