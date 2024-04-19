@@ -173,31 +173,54 @@ class Tetromino:
                             return False  # Tetromino cannot be hard-dropped
             return True  # Tetromino can be hard-dropped
 
-        # Check for moving left, right, or down
-        if direction in ["left", "right"]:
+        # check for moving left or right
+        if direction == "left" or direction == "right":
             for row_index in range(n):
                 for col_index in range(n):
-                    row, col = row_index, col_index if direction == "left" else n - 1 - col_index
-                    if self.tile_matrix[row][col] is not None:
-                        position = self.get_cell_position(row, col)
-                        if direction == "left":
-                            if position.x == 0 or game_grid.is_occupied(position.y, position.x - 1):
-                                return False
-                        elif direction == "right":
-                            if position.x == Tetromino.grid_width - 1 or game_grid.is_occupied(position.y,
-                                                                                               position.x + 1):
-                                return False
-                        break
+                    # direction = left --> check the leftmost tile of each row
+                    row, col = row_index, col_index
+                    if direction == "left" and self.tile_matrix[row][col] is not None:
+                        # the position of the leftmost tile of the current row
+                        leftmost = self.get_cell_position(row, col)
+                        # if any leftmost tile is at x = 0
+                        if leftmost.x == 0:
+                            return False  # this tetromino cannot be moved left
+                        # if the grid cell on the left of a leftmost tile is occupied
+                        if game_grid.is_occupied(leftmost.y, leftmost.x - 1):
+                            return False  # this tetromino cannot be moved left
+                        # as the leftmost tile of the current row is checked
+                        break  # end the inner for loop
+                    # direction = right --> check the rightmost tile of each row
+                    row, col = row_index, n - 1 - col_index
+                    if direction == "right" and self.tile_matrix[row][col] is not None:
+                        # the position of the rightmost tile of the current row
+                        rightmost = self.get_cell_position(row, col)
+                        # if any rightmost tile is at x = grid_width - 1
+                        if rightmost.x == Tetromino.grid_width - 1:
+                            return False  # this tetromino cannot be moved right
+                        # if the grid cell on the right of a rightmost tile is occupied
+                        if game_grid.is_occupied(rightmost.y, rightmost.x + 1):
+                            return False  # this tetromino cannot be moved right
+                        # as the rightmost tile of the current row is checked
+                        break  # end the inner for loop
+    # direction = down --> check the bottommost tile of each column
         elif direction == "down":
             for col in range(n):
                 for row in range(n - 1, -1, -1):
+                    # if the current cell of the tetromino is occupied by a tile
                     if self.tile_matrix[row][col] is not None:
-                        position = self.get_cell_position(row, col)
-                        if position.y == 0 or game_grid.is_occupied(position.y - 1, position.x):
-                            return False
-                        break
-
-        return True
+                        # the position of the bottommost tile of the current col
+                        bottommost = self.get_cell_position(row, col)
+                        # if any bottommost tile is at y = 0
+                        if bottommost.y == 0:
+                            return False  # this tetromino cannot be moved down
+                        # if the grid cell below any bottommost tile is occupied
+                        if game_grid.is_occupied(bottommost.y - 1, bottommost.x):
+                            return False  # this tetromino cannot be moved down
+                        # as the bottommost tile of the current row is checked
+                        break  # end the inner for loop
+        # if this method does not end by returning False before this line
+        return True  # this tetromino can be moved in the given direction
 
     def can_be_rotated(self, game_grid):
         # Create a copy of the tile matrix
