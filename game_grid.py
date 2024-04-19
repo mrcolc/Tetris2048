@@ -249,3 +249,4 @@ class GameGrid:
                         # Update score
                         GameGrid.score += self.tile_matrix[row][col].number  # Example scoring mechanism
         self.drop_tiles()
+
