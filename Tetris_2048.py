@@ -60,7 +60,7 @@ def start():
                 current_tetromino.move(key_typed, grid, False)
             elif key_typed == "space":
                 current_tetromino.rotate_clockwise(grid)
-            elif key_typed == "n":
+            elif key_typed == "h":
                 current_tetromino.move("n", grid, True)
             # clear the queue of the pressed keys for a smoother interaction
             stddraw.clearKeysTyped()
