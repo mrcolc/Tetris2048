@@ -48,23 +48,25 @@ def start():
             # if the left arrow key has been pressed
             if key_typed == "left":
                 # move the active tetromino left by one
-                current_tetromino.move(key_typed, grid)
+                current_tetromino.move(key_typed, grid, False)
             # if the right arrow key has been pressed
             elif key_typed == "right":
                 # move the active tetromino right by one
-                current_tetromino.move(key_typed, grid)
+                current_tetromino.move(key_typed, grid, False)
             # if the down arrow key has been pressed
             elif key_typed == "down":
                 # move the active tetromino down by one
                 # (soft drop: causes the tetromino to fall down faster)
-                current_tetromino.move(key_typed, grid)
+                current_tetromino.move(key_typed, grid, False)
             elif key_typed == "space":
                 current_tetromino.rotate_clockwise(grid)
+            elif key_typed == "n":
+                current_tetromino.move("n", grid, True)
             # clear the queue of the pressed keys for a smoother interaction
             stddraw.clearKeysTyped()
 
         # move the active tetromino down by one at each iteration (auto fall)
-        success = current_tetromino.move("down", grid)
+        success = current_tetromino.move("down", grid, False)
 
         # lock the active tetromino onto the grid when it cannot go down anymore
         if not success:
@@ -101,6 +103,7 @@ def create_tetromino():
     # create and return the tetromino
     tetromino = Tetromino(random_type)
     return tetromino
+
 
 # A function for displaying a simple menu before starting the game
 def display_game_menu(grid_height, grid_width):
