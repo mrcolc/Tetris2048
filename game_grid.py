@@ -5,11 +5,11 @@ from lib.color import Color  # used for coloring the game grid
 from point import Point  # used for tile positions
 import numpy as np  # fundamental Python module for scientific computing
 
-score = 0
 
 
 # A class for modeling the game grid
 class GameGrid:
+    score = 0
     # A constructor for creating the game grid based on the given arguments
     def __init__(self, grid_h, grid_w):
         # set the dimensions of the game grid as the given arguments
@@ -81,6 +81,8 @@ class GameGrid:
         stddraw.setFontFamily("Arial Bold")
         stddraw.text(13.5, 4.5, "NEXT")
         stddraw.text(13.5, 18, "SCORE")
+        stddraw.setFontSize(40)
+        stddraw.text(13.5,17,str(GameGrid.score))
 
         n = len(self.next_tetromino.tile_matrix)
 
@@ -166,27 +168,39 @@ class GameGrid:
         # Clear full rows and add their sum to the score
         for row in rows_to_clear:
             row_sum = sum(tile.number for tile in self.tile_matrix[row])
-            # self.score += row_sum
+            GameGrid.score += row_sum
             self.tile_matrix[row] = [None] * self.grid_width  # Clear the row
 
             for col in range(self.grid_width):
                 for r in range(row, self.grid_height - 1):
                     self.tile_matrix[r][col] = self.tile_matrix[r + 1][col]
 
-    # A method to handle free tiles
-    def handle_free_tiles(self, col, row):
-        for col in range(self.grid_width - 1):
-            for row in range(self.grid_height - 1):
+    def drop_tiles(self):
+        for col in range(self.grid_width):
+            for row in range(self.grid_height):
+                # Skip if the tile is empty
                 if self.tile_matrix[row][col] is None:
-                    if (((col == 0 and self.tile_matrix[row + 1][col - 1] is None) or (
-                            col == self.grid_width - 1 and self.tile_matrix[row + 1][col + 1] is None)) or
-                            (self.tile_matrix[row + 1][col] is not None)):
-                        self.tile_matrix[row][col] = self.tile_matrix[row + 1][col]
-                        self.tile_matrix[row + 1][col] = None
+                    continue
+                
+                # Check if all four adjacent positions are empty
+                if self.is_free_tile(row, col):
+                    # Add tile number to the score
+                    self.score += self.tile_matrix[row][col].number
+
+                    # Remove the tile from the grid
+                    self.tile_matrix[row][col] = None
+
+    def is_free_tile(self, row, col):
+        # Check if all four adjacent positions are within the grid and are empty
+        for dr, dc in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
+            r, c = row + dr, col + dc
+            if not (0 <= r < self.grid_height and 0 <= c < self.grid_width) or self.tile_matrix[r][c] is not None:
+                return False
+        return True
+
 
     # A method to merge tiles vertically on the game grid and update the score
-    def merge_tiles(self):
-        global score  # Access the global score variable
+    def merge_tiles(self):  # Access the global score variable
         rows_to_clear = []  # Keep track of rows to clear
 
         for col in range(self.grid_width):
@@ -233,4 +247,5 @@ class GameGrid:
 
                         self.tile_matrix[row + 1][col] = None
                         # Update score
-                        score += 2 * self.tile_matrix[row][col].number  # Example scoring mechanism
+                        GameGrid.score += self.tile_matrix[row][col].number  # Example scoring mechanism
+        self.drop_tiles()
