@@ -49,7 +49,7 @@ def start():
             if key_typed == "left":
                 # move the active tetromino left by one
                 current_tetromino.move(key_typed, grid, False)
-            # if the right arrow key has been pressed
+            # if the right arrow key hahs been pressed
             elif key_typed == "right":
                 # move the active tetromino right by one
                 current_tetromino.move(key_typed, grid, False)
@@ -118,7 +118,7 @@ def display_game_menu(grid_height, grid_width):
     # compute the path of the image file
     img_file = current_dir + "/images/menu_image.png"
     # the coordinates to display the image centered horizontally
-    img_center_x, img_center_y = (grid_width - 1) / 2, grid_height - 7
+    img_center_x, img_center_y = (grid_width + 3) / 2, grid_height - 7
     # the image is modeled by using the Picture class
     image_to_display = Picture(img_file)
     # add the image to the drawing canvas
