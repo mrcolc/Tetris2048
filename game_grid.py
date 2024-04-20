@@ -203,6 +203,7 @@ class GameGrid:
         return True
 
     # A method to merge tiles vertically on the game grid and update the score
+    # A method to merge tiles vertically on the game grid and update the score
     def merge_tiles(self):  # Access the global score variable
         rows_to_clear = []  # Keep track of rows to clear
 
@@ -212,6 +213,12 @@ class GameGrid:
                     if self.tile_matrix[row][col].number == self.tile_matrix[row + 1][col].number:
                         # Merge the tiles
                         self.tile_matrix[row][col].number *= 2
+
+                        self.tile_matrix[row + 1][col] = None
+                        for r in range(row + 1, self.grid_height - 1):
+                            if self.tile_matrix[r][col] is None:
+                                self.tile_matrix[r][col] = self.tile_matrix[r + 1][col]
+                                self.tile_matrix[r + 1][col] = None
 
                         merged_tile_num = self.tile_matrix[row][col].number
                         # updating the background and background colors based on the number
@@ -248,7 +255,6 @@ class GameGrid:
                             self.tile_matrix[row][col].set_background_color(Color(61, 58, 51))
                             self.tile_matrix[row][col].set_foreground_color(Color(255, 255, 255))
 
-                        self.tile_matrix[row + 1][col] = None
                         # Update score
                         GameGrid.score += self.tile_matrix[row][col].number  # Example scoring mechanism
         self.drop_tiles()
