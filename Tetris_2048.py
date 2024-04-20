@@ -247,13 +247,11 @@ def update_the_highscore(score):
     with open(scores_file, "r") as f:
         lines = [int(line.strip()) for line in f.readlines()]
 
-    found = False
     for i, line_score in enumerate(lines):
         if score > line_score:
             lines.insert(i, score)
-            found = True
             break
-    if not found:
+    else:
         lines.append(score)
 
     with open(scores_file, "w") as f:
