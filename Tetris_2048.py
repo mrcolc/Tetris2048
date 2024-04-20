@@ -14,11 +14,7 @@ import random  # used for creating tetrominoes with random types (shapes)
 
 is_paused = False
 restart = False
-<<<<<<< HEAD
 speed_game = 250
-=======
-
->>>>>>> b3e77ece44fe4d270ae209c32000b262ff79d109
 
 # The main function where this program starts execution
 def start():
@@ -117,11 +113,9 @@ def start():
 
         # display the game grid with the current tetromino
         if not is_paused or not restart:
-<<<<<<< HEAD
+
             grid.display(speed_game)
-=======
-            grid.display()
->>>>>>> b3e77ece44fe4d270ae209c32000b262ff79d109
+
         grid.merge_tiles()
         grid.clear_rows()
 
@@ -166,7 +160,6 @@ def pause_menu(grid_height, grid_width):
     text1_to_display = "Continue"
     stddraw.text(img_center_x, 5, text1_to_display)
 
-<<<<<<< HEAD
 
 def speed_selection_page(grid_height,grid_width):
     global speed_game
@@ -232,9 +225,6 @@ def speed_selection_page(grid_height,grid_width):
                     break
             
 
-
-=======
->>>>>>> b3e77ece44fe4d270ae209c32000b262ff79d109
 
 # A function for displaying a simple menu before starting the game
 def display_game_menu(grid_height, grid_width):
