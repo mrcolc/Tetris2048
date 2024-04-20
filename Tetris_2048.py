@@ -103,9 +103,6 @@ def start():
             # update the game grid by locking the tiles of the landed tetromino
             game_over = grid.update_grid(tiles, pos)
             # end the main game loop if the game is over
-            if grid.score > 2048:
-                print(grid.score)
-                display_game_menu_victory(grid_h, grid_w)
             if game_over:
                 break
             # create the next tetromino to enter the game grid
@@ -124,7 +121,6 @@ def start():
 
     # print a message on the console when the game is over
     print("Game over")
-
 
 
 # A function for creating random shaped tetrominoes to enter the game grid
@@ -286,83 +282,6 @@ def display_game_menu(grid_height, grid_width):
                     score = 0
                     restart = True
                     break
-
-
-# A function for displaying a simple menu before starting the game
-def display_game_menu_victory(grid_height, grid_width):
-    global is_paused
-    global restart
-    # the colors used for the menu
-    background_color = Color(42, 69, 99)
-    button_color = Color(25, 255, 228)
-    text_color = Color(31, 160, 239)
-    img_center_x, img_center_y = (grid_width + 3) / 2, grid_height - 7
-    # clear the background drawing canvas to background_color
-    stddraw.clear(background_color)
-    # the dimensions for the start game button
-    button_w, button_h = grid_width - 1.5, 2
-    # the coordinates of the bottom left corner for the start game button
-    button_blc_x, button_blc_y = img_center_x - button_w / 2, 4
-    button2_blc_x, button2_blc_y = img_center_x - button_w / 2, 1
-    # add the start game button as a filled rectangle
-    stddraw.setPenColor(button_color)
-    stddraw.filledRectangle(button_blc_x, button_blc_y, button_w, button_h)
-    # add the text on the start game button
-    stddraw.setFontFamily("Arial")
-    stddraw.setFontSize(25)
-    stddraw.setPenColor(text_color)
-    text_to_display = "Click Here to Start the Game"
-    stddraw.text(img_center_x, 5, text_to_display)
-
-    victory_text = "VİCTORY"
-    stddraw.setFontSize(50)
-    stddraw.text(img_center_x, 12, victory_text)
-    # the user interaction loop for the simple menu
-
-    if is_paused:
-        pause_menu(grid_height, grid_width)
-
-    while True:
-        # display the menu and wait for a short time (50 ms)
-        stddraw.show(50)
-
-        # check if the mouse has been left-clicked on the start game button
-        if stddraw.mousePressed():
-            # get the coordinates of the most recent location at which the mouse
-            # has been left-clicked
-            mouse_x, mouse_y = stddraw.mouseX(), stddraw.mouseY()
-            # check if these coordinates are inside the button
-            if mouse_x >= button_blc_x and mouse_x <= button_blc_x + button_w:
-                if mouse_y >= button_blc_y and mouse_y <= button_blc_y + button_h:
-                    speed_selection_page(grid_height, grid_width)
-                    break
-                # Restart
-                elif mouse_y >= button2_blc_y and mouse_y < button2_blc_y + button_h:
-                    score = 0
-                    restart = True
-                    break
-
-
-
-# Define a function to display the victory screen
-def display_victory_screen(grid_height, grid_width):
-    # the colors used for the menu
-    background_color = Color(42, 69, 99)
-    button_color = Color(25, 255, 228)
-    text_color = Color(31, 160, 239)
-    # clear the background drawing canvas to background_color
-    stddraw.clear(background_color)
-    # get the directory in which this python code file is placed
-    current_dir = os.path.dirname(os.path.realpath(__file__))
-    # compute the path of the image file
-    img_file = current_dir + "/images/menu_image.png"
-    # the coordinates to display the image centered horizontally
-    img_center_x, img_center_y = (grid_width + 3) / 2, grid_height - 7
-    # the image is modeled by using the Picture class
-    image_to_display = Picture(img_file)
-    # add the image to the drawing canvas
-    stddraw.picture(image_to_display, img_center_x, img_center_y)
-
 
 
 # start() function is specified as the entry point (main function) from which
