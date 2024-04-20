@@ -3,6 +3,7 @@
 # The main program of Tetris 2048 Base Code                                    #
 #                                                                              #
 ################################################################################
+import fileinput
 
 import lib.stddraw as stddraw  # for creating an animation with user interactions
 from lib.picture import Picture  # used for displaying an image on the game menu
@@ -52,7 +53,6 @@ def start():
 
     # the main game loop
     while True:
-
         if game_over:
             condition = display_game_over_menu(grid_h, grid_w, grid.score)
             if condition:
@@ -240,10 +240,30 @@ def speed_selection_page(grid_height, grid_width):
                     break
 
 
+def update_the_highscore(score):
+    current_dir = os.path.dirname(os.path.realpath(__file__))
+    scores_file = os.path.join(current_dir, "files", "high_scores.txt")
+
+    with open(scores_file, "r") as f:
+        lines = [int(line.strip()) for line in f.readlines()]
+
+    found = False
+    for i, line_score in enumerate(lines):
+        if score > line_score:
+            lines.insert(i, score)
+            found = True
+            break
+    if not found:
+        lines.append(score)
+
+    with open(scores_file, "w") as f:
+        for line in lines:
+            f.write(str(line) + "\n")
+
+
 def display_game_over_menu(grid_height, grid_width, score):
     background_color = Color(42, 69, 99)
     button_color = Color(25, 255, 228)
-    text_color = Color(31, 160, 239)
     # clear the background drawing canvas to background_color
     stddraw.clear(background_color)
     # get the directory in which this python code file is placed
@@ -264,9 +284,11 @@ def display_game_over_menu(grid_height, grid_width, score):
     # add the start game button as a filled rectangle
     stddraw.setPenColor(button_color)
     # Restart the game rectangle
-    stddraw.filledRectangle(button_blc_x, button_blc_y, button_w, button_h)
+    stddraw.filledRectangle(button_blc_x, button_blc_y, button_w, button_h - 0.5)
     # Exit the game rectangle
-    stddraw.filledRectangle(button_blc_x, button_blc_y - 3, button_w, button_h)
+    stddraw.filledRectangle(button_blc_x, button_blc_y - 2, button_w, button_h - 0.5)
+    # HighScores rectangele
+    stddraw.filledRectangle(button_blc_x, button_blc_y - 4, button_w, button_h - 0.5)
     # add the text on the start game button
     stddraw.setFontFamily("Arial BOLD")
     stddraw.setFontSize(50)
@@ -276,15 +298,18 @@ def display_game_over_menu(grid_height, grid_width, score):
     stddraw.setPenColor(Color(255, 255, 255))
     stddraw.setFontSize(30)
     text_to_display = "Your Score is " + str(score)
+    update_the_highscore(score)
     stddraw.rectangle(button_blc_x + 1.5, button_blc_y + 2.5, button_w - 3, button_h)
     stddraw.text(img_center_x, 7.5, text_to_display)
     stddraw.setPenColor(Color(0, 0, 0))
     stddraw.setFontSize(25)
     stddraw.setFontFamily("Arial")
-    text_to_display = "Click Here to Restart the Game"
-    stddraw.text(img_center_x, 5, text_to_display)
-    text_to_display = "Click Here to Exit the Game"
-    stddraw.text(img_center_x, 2, text_to_display)
+    text_to_display = "Restart the Game"
+    stddraw.text(img_center_x, 4.75, text_to_display)
+    text_to_display = "Exit the Game"
+    stddraw.text(img_center_x, 2.75, text_to_display)
+    text_to_display = "High Scores Table"
+    stddraw.text(img_center_x, 0.75, text_to_display)
     # the user interaction loop for the simple menu
 
     while True:
@@ -297,11 +322,71 @@ def display_game_over_menu(grid_height, grid_width, score):
             mouse_x, mouse_y = stddraw.mouseX(), stddraw.mouseY()
             # check if these coordinates are inside the button
             if mouse_x >= button_blc_x and mouse_x <= button_blc_x + button_w:
-                if mouse_y >= button_blc_y and mouse_y <= button_blc_y + button_h:
+                if mouse_y >= button_blc_y - 4 and mouse_y <= button_blc_y + button_h - 0.5:
+                    return display_high_scores(grid_height, grid_width)
+                elif mouse_y >= button_blc_y - 2 and mouse_y <= button_blc_y + button_h - 0.5:
                     return True
                 # Restart
-                elif mouse_y >= button_blc_y - 3 and mouse_y < button_blc_y + button_h:
+                elif mouse_y >= button_blc_y and mouse_y < button_blc_y + button_h - 0.5:
                     return False
+
+
+def display_high_scores(grid_height, grid_width):
+    background_color = Color(42, 69, 99)
+    button_color = Color(25, 255, 228)
+
+    # clear the background drawing canvas to background_color
+    stddraw.clear(background_color)
+    stddraw.setPenColor(Color(255, 255, 255))
+    stddraw.rectangle(0.5, 0.5, grid_width + 2, grid_height - 2)
+    stddraw.setFontSize(35)
+    stddraw.text((grid_width + 2) / 2 + 0.5, grid_height - 3, "High Scores Table")
+    stddraw.line(2.5, grid_height - 3.75, grid_width + 0.5, grid_height - 3.75)
+
+    current_dir = os.path.dirname(os.path.realpath(__file__))
+    # compute the path of the image file
+    scores_file = os.path.join(current_dir, "files", "high_scores.txt")
+    scores = []
+    with open(scores_file, "r") as f:
+        lines = f.readlines()
+        for line in lines:
+            line = line.strip()
+            if line:
+                score = int(line)
+                scores.append(score)
+                if len(scores) == 10:
+                    break
+    f.close()
+    pos_x = 7.25
+    pos_y = grid_height - 5
+    counter = 1
+    stddraw.setFontSize(25)
+    stddraw.setFontFamily("Arial")
+    n = len(scores)
+    while counter - 1 < n:
+        stddraw.text(pos_x, pos_y, str(counter) + ".  " + str(scores[counter - 1]) + " points")
+        pos_y -= 1.5
+        counter += 1
+    stddraw.setPenColor(button_color)
+    # restart rectangle
+    stddraw.filledRectangle(1, 1, 3.5, 1.5)
+    # exit rectangel
+    stddraw.filledRectangle(10.5, 1, 3.5, 1.5)
+    stddraw.setPenColor(Color(0, 0, 0))
+    stddraw.text(2.75, 1.75, "Restart")
+    stddraw.text(12.25, 1.75, "Exit")
+
+    while True:
+        stddraw.show(50)
+
+        # get the coordinates of the most recent location at which the mouse
+        # has been left-clicked
+        mouse_x, mouse_y = stddraw.mouseX(), stddraw.mouseY()
+        # check if these coordinates are inside the button
+        if mouse_x >= 1 and mouse_x <= 4.5 and mouse_y >= 1 and mouse_y <= 2.5:
+            return True
+        elif mouse_x >= 10.5 and mouse_x <= 14 and mouse_y >= 1 and mouse_y <= 2.5:
+            exit()
 
 
 # A function for displaying a simple menu before starting the game
@@ -336,7 +421,7 @@ def display_game_menu(grid_height, grid_width):
     stddraw.setFontFamily("Arial")
     stddraw.setFontSize(25)
     stddraw.setPenColor(text_color)
-    text_to_display = "Click Here to Start the Game"
+    text_to_display = "Start the Game"
     stddraw.text(img_center_x, 5, text_to_display)
     # the user interaction loop for the simple menu
 
