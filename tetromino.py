@@ -150,7 +150,7 @@ class Tetromino:
             self.bottom_left_cell.x -= 1
         elif direction == "right":
             self.bottom_left_cell.x += 1
-        elif direction == "n":
+        elif direction == "h":
             while self.move("down", game_grid, hard_drop=True):
                 pass  # Continuously move down until the tetromino cannot move further
             return True

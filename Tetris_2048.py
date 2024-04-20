@@ -14,6 +14,8 @@ import random  # used for creating tetrominoes with random types (shapes)
 
 is_paused = False
 restart = False
+
+
 # The main function where this program starts execution
 def start():
     global is_paused
@@ -52,7 +54,6 @@ def start():
             is_paused = False
             restart = False
             # Restart and remake ol the necessary variables 0 or starting position
-            print("Restarting the game...")
             score = 0
             # continue with the game setup as before
             Tetromino.grid_height = grid_h
@@ -69,8 +70,8 @@ def start():
             if key_typed == "p":
                 is_paused = True
                 print("stopped")
-                display_game_menu(grid_h,grid_w) 
-            # if the left arrow key has been pressed
+                display_game_menu(grid_h, grid_w)
+                # if the left arrow key has been pressed
             elif key_typed == "left":
                 # move the active tetromino left by one
                 current_tetromino.move(key_typed, grid, False)
@@ -86,7 +87,7 @@ def start():
             elif key_typed == "space":
                 current_tetromino.rotate_clockwise(grid)
             elif key_typed == "h":
-                current_tetromino.move("n", grid, True)
+                current_tetromino.move("h", grid, True)
             # clear the queue of the pressed keys for a smoother interaction
             stddraw.clearKeysTyped()
 
@@ -111,7 +112,8 @@ def start():
             grid.next_tetromino = next_tetromino
 
         # display the game grid with the current tetromino
-        grid.display()
+        if not is_paused or not restart:
+            grid.display()
         grid.merge_tiles()
         grid.clear_rows()
 
@@ -130,11 +132,11 @@ def create_tetromino():
     return tetromino
 
 
-def pause_menu(grid_height,grid_width):
+def pause_menu(grid_height, grid_width):
     background_color = Color(42, 69, 99)
     img_center_x, img_center_y = (grid_width + 3) / 2, grid_height - 7
     button_color = Color(25, 255, 228)
-    text_color = Color(7,5,5)
+    text_color = Color(7, 5, 5)
     button_w, button_h = grid_width - 1.5, 2
 
     stddraw.setPenColor(button_color)
@@ -144,17 +146,18 @@ def pause_menu(grid_height,grid_width):
     stddraw.setPenColor(background_color)
     stddraw.filledRectangle(button_blc_x, button_blc_y, button_w, button_h)
     stddraw.setPenColor(button_color)
-    stddraw.filledRectangle(button_blc_x,button_blc_y-3,button_w,button_h)
+    stddraw.filledRectangle(button_blc_x, button_blc_y - 3, button_w, button_h)
     stddraw.filledRectangle(button_blc_x, button_blc_y, button_w, button_h)
     stddraw.setFontFamily("Arial")
     stddraw.setFontSize(25)
     stddraw.setPenColor(text_color)
 
     text_to_display = "Restart"
-    stddraw.text(img_center_x,2,text_to_display)
+    stddraw.text(img_center_x, 2, text_to_display)
 
     text1_to_display = "Continue"
-    stddraw.text(img_center_x,5,text1_to_display)
+    stddraw.text(img_center_x, 5, text1_to_display)
+
 
 # A function for displaying a simple menu before starting the game
 def display_game_menu(grid_height, grid_width):
@@ -192,10 +195,7 @@ def display_game_menu(grid_height, grid_width):
     stddraw.text(img_center_x, 5, text_to_display)
     # the user interaction loop for the simple menu
     if is_paused:
-        pause_menu(grid_height,grid_width)
-
-
-
+        pause_menu(grid_height, grid_width)
 
     while True:
         # display the menu and wait for a short time (50 ms)
@@ -215,7 +215,6 @@ def display_game_menu(grid_height, grid_width):
                     score = 0
                     restart = True
                     break
-
 
 
 # start() function is specified as the entry point (main function) from which

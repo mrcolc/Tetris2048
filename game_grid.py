@@ -6,10 +6,10 @@ from point import Point  # used for tile positions
 import numpy as np  # fundamental Python module for scientific computing
 
 
-
 # A class for modeling the game grid
 class GameGrid:
     score = 0
+
     # A constructor for creating the game grid based on the given arguments
     def __init__(self, grid_h, grid_w):
         # set the dimensions of the game grid as the given arguments
@@ -31,7 +31,7 @@ class GameGrid:
         # thickness values used for the grid lines and the grid boundaries
         self.line_thickness = 0.002
         self.box_thickness = 10 * 0.001
-    
+
     # A method for displaying the game grid
     def display(self):
         # clear the background to empty_cell_color
@@ -82,11 +82,11 @@ class GameGrid:
         stddraw.text(13.5, 4.5, "NEXT")
         stddraw.text(13.5, 18, "SCORE")
         stddraw.setFontSize(40)
-        stddraw.text(13.5,17,str(GameGrid.score))
+        stddraw.text(13.5, 17, str(GameGrid.score))
 
         stddraw.setFontSize(20)
-        stddraw.text(13.5,9.5,"Hard Drop = n")
-        stddraw.text(13.5,10,"Pause Menu = p")
+        stddraw.text(13.5, 9.5, "Hard Drop = h")
+        stddraw.text(13.5, 10, "Pause Menu = p")
 
         n = len(self.next_tetromino.tile_matrix)
 
@@ -185,7 +185,7 @@ class GameGrid:
                 # Skip if the tile is empty
                 if self.tile_matrix[row][col] is None:
                     continue
-                
+
                 # Check if all four adjacent positions are empty
                 if self.is_free_tile(row, col):
                     # Add tile number to the score
@@ -201,7 +201,6 @@ class GameGrid:
             if not (0 <= r < self.grid_height and 0 <= c < self.grid_width) or self.tile_matrix[r][c] is not None:
                 return False
         return True
-
 
     # A method to merge tiles vertically on the game grid and update the score
     def merge_tiles(self):  # Access the global score variable
@@ -253,4 +252,3 @@ class GameGrid:
                         # Update score
                         GameGrid.score += self.tile_matrix[row][col].number  # Example scoring mechanism
         self.drop_tiles()
-
