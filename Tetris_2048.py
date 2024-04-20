@@ -13,9 +13,13 @@ from tetromino import Tetromino  # the class for modeling the tetrominoes
 import random  # used for creating tetrominoes with random types (shapes)
 
 is_paused = False
+restart = False
 # The main function where this program starts execution
 def start():
     global is_paused
+    global restart
+    global score
+    score = 0
     # set the dimensions of the game grid
     grid_h, grid_w = 20, 12
     # set the size of the drawing canvas (the displayed window)
@@ -44,6 +48,22 @@ def start():
     # the main game loop
     while True:
         # check for any user interaction via the keyboard
+        if restart:
+            is_paused = False
+            restart = False
+            # Restart and remake ol the necessary variables 0 or starting position
+            print("Restarting the game...")
+            score = 0
+            # continue with the game setup as before
+            Tetromino.grid_height = grid_h
+            Tetromino.grid_width = grid_w
+            grid = GameGrid(grid_h, grid_w)
+            current_tetromino = create_tetromino()
+            grid.current_tetromino = current_tetromino
+            next_tetromino = create_tetromino()
+            grid.next_tetromino = next_tetromino
+            display_game_menu(grid_h, grid_w)
+
         if stddraw.hasNextKeyTyped():  # check if the user has pressed a key
             key_typed = stddraw.nextKeyTyped()
             if key_typed == "p":
@@ -124,13 +144,14 @@ def pause_menu(grid_height,grid_width):
     stddraw.setPenColor(background_color)
     stddraw.filledRectangle(button_blc_x, button_blc_y, button_w, button_h)
     stddraw.setPenColor(button_color)
-    stddraw.filledRectangle(button_blc_x,button_blc_y,button_w,button_h)
+    stddraw.filledRectangle(button_blc_x,button_blc_y-3,button_w,button_h)
+    stddraw.filledRectangle(button_blc_x, button_blc_y, button_w, button_h)
     stddraw.setFontFamily("Arial")
     stddraw.setFontSize(25)
     stddraw.setPenColor(text_color)
 
-    #text_to_display = "Continue"
-    #stddraw.text(img_center_x,5,text_to_display)
+    text_to_display = "Restart"
+    stddraw.text(img_center_x,2,text_to_display)
 
     text1_to_display = "Continue"
     stddraw.text(img_center_x,5,text1_to_display)
@@ -138,6 +159,7 @@ def pause_menu(grid_height,grid_width):
 # A function for displaying a simple menu before starting the game
 def display_game_menu(grid_height, grid_width):
     global is_paused
+    global restart
     # the colors used for the menu
     background_color = Color(42, 69, 99)
     button_color = Color(25, 255, 228)
@@ -158,6 +180,7 @@ def display_game_menu(grid_height, grid_width):
     button_w, button_h = grid_width - 1.5, 2
     # the coordinates of the bottom left corner for the start game button
     button_blc_x, button_blc_y = img_center_x - button_w / 2, 4
+    button2_blc_x, button2_blc_y = img_center_x - button_w / 2, 1
     # add the start game button as a filled rectangle
     stddraw.setPenColor(button_color)
     stddraw.filledRectangle(button_blc_x, button_blc_y, button_w, button_h)
@@ -187,6 +210,12 @@ def display_game_menu(grid_height, grid_width):
             if mouse_x >= button_blc_x and mouse_x <= button_blc_x + button_w:
                 if mouse_y >= button_blc_y and mouse_y <= button_blc_y + button_h:
                     break  # break the loop to end the method and start the game
+                # Restart
+                elif mouse_y >= button2_blc_y and mouse_y < button2_blc_y + button_h:
+                    score = 0
+                    restart = True
+                    break
+
 
 
 # start() function is specified as the entry point (main function) from which

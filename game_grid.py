@@ -85,8 +85,8 @@ class GameGrid:
         stddraw.text(13.5,17,str(GameGrid.score))
 
         stddraw.setFontSize(20)
-        stddraw.text(13.5,10,"Hard Drop = n")
-        stddraw.text(13.5,9.5,"Pause = p")
+        stddraw.text(13.5,9.5,"Hard Drop = n")
+        stddraw.text(13.5,10,"Pause Menu = p")
 
         n = len(self.next_tetromino.tile_matrix)
 
