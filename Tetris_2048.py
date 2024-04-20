@@ -14,7 +14,7 @@ import random  # used for creating tetrominoes with random types (shapes)
 
 is_paused = False
 restart = False
-speed_game = 250
+
 
 # The main function where this program starts execution
 def start():
@@ -113,7 +113,7 @@ def start():
 
         # display the game grid with the current tetromino
         if not is_paused or not restart:
-            grid.display(speed_game)
+            grid.display()
         grid.merge_tiles()
         grid.clear_rows()
 
@@ -159,72 +159,6 @@ def pause_menu(grid_height, grid_width):
     stddraw.text(img_center_x, 5, text1_to_display)
 
 
-def speed_selection_page(grid_height,grid_width):
-    global speed_game
-    background_color = Color(42, 69, 99)
-    button_color = Color(25, 255, 228)
-    text_color = Color(7, 5, 5)
-
-    img_center_x, img_center_y = (grid_width + 3) / 2, grid_height - 7
-    button_w, button_h = grid_width - 1.5, 2
-    button_blc_x, button_blc_y = img_center_x - button_w / 2, 4
-
-    stddraw.setPenColor(background_color)
-    stddraw.filledRectangle(button_blc_x, button_blc_y, button_w, button_h)
-
-
-    img_center_x, img_center_y = (grid_width + 3) / 2, grid_height - 7
-    button_w, button_h = grid_width -8, 2
-
-    stddraw.setPenColor(button_color)
-    button3_blc_x, button3_blc_y = img_center_x  - 5 - button_w / 2, 7
-    button2_blc_x, button2_blc_y = img_center_x - button_w / 2, 7
-    button_blc_x, button_blc_y = img_center_x +5 - button_w / 2, 7
-
-    stddraw.filledRectangle(button3_blc_x, button3_blc_y, button_w, button_h)
-    stddraw.filledRectangle(button2_blc_x, button2_blc_y, button_w, button_h)
-    stddraw.filledRectangle(button_blc_x, button_blc_y, button_w, button_h)
-
-    stddraw.setFontFamily("Arial")
-    stddraw.setFontSize(25)
-    stddraw.setPenColor(text_color)
-
-    text_to_display = "Slow"
-    stddraw.text(img_center_x - 5, 8, text_to_display)
-
-    text1_to_display = "Medium"
-    stddraw.text(img_center_x, 8, text1_to_display)
-
-    text1_to_display = "Fast"
-    stddraw.text(img_center_x + 5, 8, text1_to_display)
-
-    while True:
-        stddraw.show(50)
-
-        if stddraw.mousePressed():
-            mouse_x,mouse_y = stddraw.mouseX(), stddraw.mouseY()
-
-            if mouse_x >= button_blc_x and mouse_x < button_blc_x + button_w:
-                if mouse_y >= button_blc_y and mouse_y <= button_blc_y + button_h:
-                    print("slow")
-                    speed_game = 50
-                    break
-
-            if mouse_x >= button2_blc_x and mouse_x < button2_blc_x + button_w:
-                if mouse_y >= button2_blc_y and mouse_y <= button2_blc_y + button_h:
-                    print("slow")
-                    speed_game = 250
-                    break
-
-            if mouse_x >= button3_blc_x and mouse_x < button3_blc_x + button_w:
-                if mouse_y >= button3_blc_y and mouse_y <= button3_blc_y + button_h:
-                    print("slow")
-                    speed_game = 400
-                    break
-            
-
-
-
 # A function for displaying a simple menu before starting the game
 def display_game_menu(grid_height, grid_width):
     global is_paused
@@ -260,7 +194,6 @@ def display_game_menu(grid_height, grid_width):
     text_to_display = "Click Here to Start the Game"
     stddraw.text(img_center_x, 5, text_to_display)
     # the user interaction loop for the simple menu
-
     if is_paused:
         pause_menu(grid_height, grid_width)
 
@@ -276,8 +209,7 @@ def display_game_menu(grid_height, grid_width):
             # check if these coordinates are inside the button
             if mouse_x >= button_blc_x and mouse_x <= button_blc_x + button_w:
                 if mouse_y >= button_blc_y and mouse_y <= button_blc_y + button_h:
-                    speed_selection_page(grid_height,grid_width)
-                    break
+                    break  # break the loop to end the method and start the game
                 # Restart
                 elif mouse_y >= button2_blc_y and mouse_y < button2_blc_y + button_h:
                     score = 0
