@@ -8,7 +8,6 @@ import numpy as np  # fundamental Python module for scientific computing
 
 # A class for modeling the game grid
 class GameGrid:
-    score = 0
 
     # A constructor for creating the game grid based on the given arguments
     def __init__(self, grid_h, grid_w):
@@ -31,6 +30,8 @@ class GameGrid:
         # thickness values used for the grid lines and the grid boundaries
         self.line_thickness = 0.002
         self.box_thickness = 10 * 0.001
+
+        self.score = 0
 
     # A method for displaying the game grid
     def display(self, speed=250):
@@ -82,7 +83,7 @@ class GameGrid:
         stddraw.text(13.5, 4.5, "NEXT")
         stddraw.text(13.5, 18, "SCORE")
         stddraw.setFontSize(40)
-        stddraw.text(13.5, 17, str(GameGrid.score))
+        stddraw.text(13.5, 17, str(self.score))
 
         stddraw.setFontSize(20)
         stddraw.text(13.5, 9.5, "Hard Drop = h")
@@ -172,7 +173,7 @@ class GameGrid:
         # Clear full rows and add their sum to the score
         for row in rows_to_clear:
             row_sum = sum(tile.number for tile in self.tile_matrix[row])
-            GameGrid.score += row_sum
+            self.score += row_sum
             self.tile_matrix[row] = [None] * self.grid_width  # Clear the row
 
             for col in range(self.grid_width):
@@ -232,4 +233,4 @@ class GameGrid:
                             self.tile_matrix[row][col].set_foreground_color(Color(255, 255, 255))
 
                         # Update score
-                        GameGrid.score += self.tile_matrix[row][col].number  # Example scoring mechanism
+                        self.score += self.tile_matrix[row][col].number  # Example scoring mechanism

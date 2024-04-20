@@ -23,6 +23,7 @@ def start():
     global restart
     global score
     score = 0
+    game_over = False
     # set the dimensions of the game grid
     grid_h, grid_w = 20, 12
     # set the size of the drawing canvas (the displayed window)
@@ -37,6 +38,7 @@ def start():
     Tetromino.grid_width = grid_w
     # create the game grid
     grid = GameGrid(grid_h, grid_w)
+    grid.score = score
     # create the first tetromino to enter the game grid
     # by using the create_tetromino function defined below
     current_tetromino = create_tetromino()
@@ -50,21 +52,25 @@ def start():
 
     # the main game loop
     while True:
+
+        if game_over:
+            condition = display_game_over_menu(grid_h, grid_w, grid.score)
+            if condition:
+                is_paused = False
+                restart = False
+                current_tetromino, next_tetromino, grid = restart_the_grid(grid_h, grid_w, grid)
+                display_game_menu(grid_h, grid_w)
+                game_over = False
+                stddraw.clearKeysTyped()
+            else:
+                exit()
         # check for any user interaction via the keyboard
         if restart:
             is_paused = False
             restart = False
-            # Restart and remake ol the necessary variables 0 or starting position
-            score = 0
-            # continue with the game setup as before
-            Tetromino.grid_height = grid_h
-            Tetromino.grid_width = grid_w
-            grid = GameGrid(grid_h, grid_w)
-            current_tetromino = create_tetromino()
-            grid.current_tetromino = current_tetromino
-            next_tetromino = create_tetromino()
-            grid.next_tetromino = next_tetromino
+            current_tetromino, next_tetromino, grid = restart_the_grid(grid_h, grid_w, grid)
             display_game_menu(grid_h, grid_w)
+            stddraw.clearKeysTyped()
 
         if stddraw.hasNextKeyTyped():  # check if the user has pressed a key
             key_typed = stddraw.nextKeyTyped()
@@ -103,8 +109,7 @@ def start():
             # update the game grid by locking the tiles of the landed tetromino
             game_over = grid.update_grid(tiles, pos)
             # end the main game loop if the game is over
-            if game_over:
-                break
+
             # create the next tetromino to enter the game grid
             # by using the create_tetromino function defined below
             current_tetromino = next_tetromino
@@ -119,8 +124,19 @@ def start():
         grid.merge_tiles()
         grid.clear_rows()
 
-    # print a message on the console when the game is over
-    print("Game over")
+
+def restart_the_grid(grid_h, grid_w, grid):
+    # Restart and remake ol the necessary variables 0 or starting position
+    grid.score = 0
+    # continue with the game setup as before
+    Tetromino.grid_height = grid_h
+    Tetromino.grid_width = grid_w
+    grid = GameGrid(grid_h, grid_w)
+    current_tetromino = create_tetromino()
+    grid.current_tetromino = current_tetromino
+    next_tetromino = create_tetromino()
+    grid.next_tetromino = next_tetromino
+    return current_tetromino, next_tetromino, grid
 
 
 # A function for creating random shaped tetrominoes to enter the game grid
@@ -222,6 +238,70 @@ def speed_selection_page(grid_height, grid_width):
                     print("slow")
                     speed_game = 400
                     break
+
+
+def display_game_over_menu(grid_height, grid_width, score):
+    background_color = Color(42, 69, 99)
+    button_color = Color(25, 255, 228)
+    text_color = Color(31, 160, 239)
+    # clear the background drawing canvas to background_color
+    stddraw.clear(background_color)
+    # get the directory in which this python code file is placed
+    current_dir = os.path.dirname(os.path.realpath(__file__))
+    # compute the path of the image file
+    img_file = current_dir + "/images/menu_image.png"
+    # the coordinates to display the image centered horizontally
+    img_center_x, img_center_y = (grid_width + 3) / 2, grid_height - 7
+    # the image is modeled by using the Picture class
+    image_to_display = Picture(img_file)
+    # add the image to the drawing canvas
+    stddraw.picture(image_to_display, img_center_x, img_center_y)
+    # the dimensions for the start game button
+    button_w, button_h = grid_width - 1.5, 2
+    # the coordinates of the bottom left corner for the start game button
+    button_blc_x, button_blc_y = img_center_x - button_w / 2, 4
+    button2_blc_x, button2_blc_y = img_center_x - button_w / 2, 1
+    # add the start game button as a filled rectangle
+    stddraw.setPenColor(button_color)
+    # Restart the game rectangle
+    stddraw.filledRectangle(button_blc_x, button_blc_y, button_w, button_h)
+    # Exit the game rectangle
+    stddraw.filledRectangle(button_blc_x, button_blc_y - 3, button_w, button_h)
+    # add the text on the start game button
+    stddraw.setFontFamily("Arial BOLD")
+    stddraw.setFontSize(50)
+    stddraw.setPenColor(Color(255, 0, 0))
+    text_to_display = "GAME OVER!"
+    stddraw.text(img_center_x, 17.5, text_to_display)
+    stddraw.setPenColor(Color(255, 255, 255))
+    stddraw.setFontSize(30)
+    text_to_display = "Your Score is " + str(score)
+    stddraw.rectangle(button_blc_x + 1.5, button_blc_y + 2.5, button_w - 3, button_h)
+    stddraw.text(img_center_x, 7.5, text_to_display)
+    stddraw.setPenColor(Color(0, 0, 0))
+    stddraw.setFontSize(25)
+    stddraw.setFontFamily("Arial")
+    text_to_display = "Click Here to Restart the Game"
+    stddraw.text(img_center_x, 5, text_to_display)
+    text_to_display = "Click Here to Exit the Game"
+    stddraw.text(img_center_x, 2, text_to_display)
+    # the user interaction loop for the simple menu
+
+    while True:
+        stddraw.show(50)
+
+        # check if the mouse has been left-clicked on the start game button
+        if stddraw.mousePressed():
+            # get the coordinates of the most recent location at which the mouse
+            # has been left-clicked
+            mouse_x, mouse_y = stddraw.mouseX(), stddraw.mouseY()
+            # check if these coordinates are inside the button
+            if mouse_x >= button_blc_x and mouse_x <= button_blc_x + button_w:
+                if mouse_y >= button_blc_y and mouse_y <= button_blc_y + button_h:
+                    return True
+                # Restart
+                elif mouse_y >= button_blc_y - 3 and mouse_y < button_blc_y + button_h:
+                    return False
 
 
 # A function for displaying a simple menu before starting the game
