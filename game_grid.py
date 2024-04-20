@@ -33,7 +33,7 @@ class GameGrid:
         self.box_thickness = 10 * 0.001
 
     # A method for displaying the game grid
-    def display(self):
+    def display(self, speed=250):
         # clear the background to empty_cell_color
         stddraw.clear(self.empty_cell_color)
         # draw the game grid
@@ -47,7 +47,7 @@ class GameGrid:
         # draw the right panel
         self.draw_right_panel()
         # show the resulting drawing with a pause duration = 250 ms
-        stddraw.show(250)
+        stddraw.show(speed)
 
     # A method for drawing the cells and the lines of the game grid
     def draw_grid(self):
@@ -179,30 +179,6 @@ class GameGrid:
                 for r in range(row, self.grid_height - 1):
                     self.tile_matrix[r][col] = self.tile_matrix[r + 1][col]
 
-    def drop_tiles(self):
-        for col in range(self.grid_width):
-            for row in range(self.grid_height):
-                # Skip if the tile is empty
-                if self.tile_matrix[row][col] is None:
-                    continue
-
-                # Check if all four adjacent positions are empty
-                if self.is_free_tile(row, col):
-                    # Add tile number to the score
-                    self.score += self.tile_matrix[row][col].number
-
-                    # Remove the tile from the grid
-                    self.tile_matrix[row][col] = None
-
-    def is_free_tile(self, row, col):
-        # Check if all four adjacent positions are within the grid and are empty
-        for dr, dc in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
-            r, c = row + dr, col + dc
-            if not (0 <= r < self.grid_height and 0 <= c < self.grid_width) or self.tile_matrix[r][c] is not None:
-                return False
-        return True
-
-    # A method to merge tiles vertically on the game grid and update the score
     # A method to merge tiles vertically on the game grid and update the score
     def merge_tiles(self):  # Access the global score variable
         rows_to_clear = []  # Keep track of rows to clear
@@ -257,4 +233,3 @@ class GameGrid:
 
                         # Update score
                         GameGrid.score += self.tile_matrix[row][col].number  # Example scoring mechanism
-        self.drop_tiles()
