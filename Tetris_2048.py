@@ -12,9 +12,10 @@ from game_grid import GameGrid  # the class for modeling the game grid
 from tetromino import Tetromino  # the class for modeling the tetrominoes
 import random  # used for creating tetrominoes with random types (shapes)
 
-
+is_paused = False
 # The main function where this program starts execution
 def start():
+    global is_paused
     # set the dimensions of the game grid
     grid_h, grid_w = 20, 12
     # set the size of the drawing canvas (the displayed window)
@@ -44,9 +45,13 @@ def start():
     while True:
         # check for any user interaction via the keyboard
         if stddraw.hasNextKeyTyped():  # check if the user has pressed a key
-            key_typed = stddraw.nextKeyTyped()  # the most recently pressed key
+            key_typed = stddraw.nextKeyTyped()
+            if key_typed == "p":
+                is_paused = True
+                print("stopped")
+                display_game_menu(grid_h,grid_w) 
             # if the left arrow key has been pressed
-            if key_typed == "left":
+            elif key_typed == "left":
                 # move the active tetromino left by one
                 current_tetromino.move(key_typed, grid, False)
             # if the right arrow key hahs been pressed
@@ -105,8 +110,34 @@ def create_tetromino():
     return tetromino
 
 
+def pause_menu(grid_height,grid_width):
+    background_color = Color(42, 69, 99)
+    img_center_x, img_center_y = (grid_width + 3) / 2, grid_height - 7
+    button_color = Color(25, 255, 228)
+    text_color = Color(7,5,5)
+    button_w, button_h = grid_width - 1.5, 2
+
+    stddraw.setPenColor(button_color)
+    button2_blc_x, button2_blc_y = img_center_x - button_w / 2, 1
+    button_blc_x, button_blc_y = img_center_x - button_w / 2, 4
+
+    stddraw.setPenColor(background_color)
+    stddraw.filledRectangle(button_blc_x, button_blc_y, button_w, button_h)
+    stddraw.setPenColor(button_color)
+    stddraw.filledRectangle(button_blc_x,button_blc_y,button_w,button_h)
+    stddraw.setFontFamily("Arial")
+    stddraw.setFontSize(25)
+    stddraw.setPenColor(text_color)
+
+    #text_to_display = "Continue"
+    #stddraw.text(img_center_x,5,text_to_display)
+
+    text1_to_display = "Continue"
+    stddraw.text(img_center_x,5,text1_to_display)
+
 # A function for displaying a simple menu before starting the game
 def display_game_menu(grid_height, grid_width):
+    global is_paused
     # the colors used for the menu
     background_color = Color(42, 69, 99)
     button_color = Color(25, 255, 228)
@@ -137,10 +168,16 @@ def display_game_menu(grid_height, grid_width):
     text_to_display = "Click Here to Start the Game"
     stddraw.text(img_center_x, 5, text_to_display)
     # the user interaction loop for the simple menu
+    if is_paused:
+        pause_menu(grid_height,grid_width)
+
+
+
 
     while True:
         # display the menu and wait for a short time (50 ms)
         stddraw.show(50)
+
         # check if the mouse has been left-clicked on the start game button
         if stddraw.mousePressed():
             # get the coordinates of the most recent location at which the mouse
