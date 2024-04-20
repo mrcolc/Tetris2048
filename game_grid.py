@@ -33,7 +33,7 @@ class GameGrid:
         self.box_thickness = 10 * 0.001
     
     # A method for displaying the game grid
-    def display(self):
+    def display(self,speed=250):
         # clear the background to empty_cell_color
         stddraw.clear(self.empty_cell_color)
         # draw the game grid
@@ -47,7 +47,7 @@ class GameGrid:
         # draw the right panel
         self.draw_right_panel()
         # show the resulting drawing with a pause duration = 250 ms
-        stddraw.show(250)
+        stddraw.show(speed)
 
     # A method for drawing the cells and the lines of the game grid
     def draw_grid(self):
@@ -253,4 +253,3 @@ class GameGrid:
                         # Update score
                         GameGrid.score += self.tile_matrix[row][col].number  # Example scoring mechanism
         self.drop_tiles()
-
