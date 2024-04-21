@@ -13,6 +13,7 @@ from game_grid import GameGrid  # the class for modeling the game grid
 from tetromino import Tetromino  # the class for modeling the tetrominoes
 import random  # used for creating tetrominoes with random types (shapes)
 
+# setting the is_paused, restart and speed of the game
 is_paused = False
 restart = False
 speed_game = 250
@@ -20,6 +21,7 @@ speed_game = 250
 
 # The main function where this program starts execution
 def start():
+    # global is_paused, restart and score variables
     global is_paused
     global restart
     global score
@@ -53,14 +55,21 @@ def start():
 
     # the main game loop
     while True:
-
+        # if the score
         if grid.score > 2048:
-            display_game_over_menu(grid_h,grid_w,grid.score,"VİCTORY!")
-            break
-
+            condition = display_ending_menu(grid_h, grid_w, grid.score, "VICTORY!")
+            if condition:
+                is_paused = False
+                restart = False
+                current_tetromino, next_tetromino, grid = restart_the_grid(grid_h, grid_w, grid)
+                display_game_menu(grid_h, grid_w)
+                game_over = False
+                stddraw.clearKeysTyped()
+            else:
+                exit()
 
         if game_over:
-            condition = display_game_over_menu(grid_h, grid_w, grid.score,"GAME OVER!")
+            condition = display_ending_menu(grid_h, grid_w, grid.score, "GAME OVER!")
             if condition:
                 is_paused = False
                 restart = False
@@ -172,9 +181,6 @@ def display_victory_page(grid_h, grid_w):
                 if mouse_y >= button_blc_y and mouse_y <= button_blc_y + button_h:
                     # Restart the game
                     return True
-
-
-
 
 
 def restart_the_grid(grid_h, grid_w, grid):
@@ -311,7 +317,7 @@ def update_the_highscore(score):
             f.write(str(line) + "\n")
 
 
-def display_game_over_menu(grid_height, grid_width, score,heading):
+def display_ending_menu(grid_height, grid_width, score, heading):
     background_color = Color(42, 69, 99)
     button_color = Color(25, 255, 228)
     # clear the background drawing canvas to background_color
@@ -342,11 +348,14 @@ def display_game_over_menu(grid_height, grid_width, score,heading):
     # add the text on the start game button
     stddraw.setFontFamily("Arial BOLD")
     stddraw.setFontSize(50)
-    stddraw.setPenColor(Color(255, 0, 0))
     text_to_display = heading
+    if heading == "VICTORY!":
+        stddraw.setPenColor(Color(255, 215, 0))
+    else:
+        stddraw.setPenColor(Color(255, 0, 0))
     stddraw.text(img_center_x, 17.5, text_to_display)
-    stddraw.setPenColor(Color(255, 255, 255))
     stddraw.setFontSize(30)
+    stddraw.setPenColor(Color(255, 255, 255))
     text_to_display = "Your Score is " + str(score)
     update_the_highscore(score)
     stddraw.rectangle(button_blc_x + 1.5, button_blc_y + 2.5, button_w - 3, button_h)
@@ -372,12 +381,12 @@ def display_game_over_menu(grid_height, grid_width, score,heading):
             mouse_x, mouse_y = stddraw.mouseX(), stddraw.mouseY()
             # check if these coordinates are inside the button
             if mouse_x >= button_blc_x and mouse_x <= button_blc_x + button_w:
-                if mouse_y >= button_blc_y - 4 and mouse_y <= button_blc_y + button_h - 0.5:
+                if mouse_y >= button_blc_y - 4 and mouse_y <= button_blc_y + button_h - 4.5:
                     return display_high_scores(grid_height, grid_width)
-                elif mouse_y >= button_blc_y - 2 and mouse_y <= button_blc_y + button_h - 0.5:
+                elif mouse_y >= button_blc_y  and mouse_y <= button_blc_y + button_h - 0.5:
                     return True
                 # Restart
-                elif mouse_y >= button_blc_y and mouse_y < button_blc_y + button_h - 0.5:
+                elif mouse_y >= button_blc_y - 2 and mouse_y < button_blc_y + button_h - 2.5:
                     return False
 
 
