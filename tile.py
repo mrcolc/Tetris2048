@@ -14,12 +14,14 @@ class Tile:
 
     # A constructor that creates a tile with 2 as the number on it
     def __init__(self):
-        # set the number on this tile
+        # set the number on this tile randomly to the 2 or 4
         self.number = random.choice([2, 4])
         # set the colors of this tile
         if self.number == 2:
+            # if the number is 2, adjust the background
             self.background_color = Color(238, 228, 218)
         else:
+            # if the number is 4, adjust the background
             self.background_color = Color(236, 224, 200)
 
         self.foreground_color = Color(0, 0, 0)  # foreground (number) color

@@ -1,5 +1,3 @@
-from django.db.models.expressions import Col
-
 import lib.stddraw as stddraw  # used for displaying the game grid
 from lib.color import Color  # used for coloring the game grid
 from point import Point  # used for tile positions
@@ -18,7 +16,7 @@ class GameGrid:
         self.tile_matrix = np.full((grid_h, grid_w), None)
         # create the tetromino that is currently being moved on the game grid
         self.current_tetromino = None
-        # create the next tetromino
+        # create the next tetromino to hold the next tetromino
         self.next_tetromino = None
         # the game_over flag shows whether the game is over or not
         self.game_over = False
@@ -30,7 +28,7 @@ class GameGrid:
         # thickness values used for the grid lines and the grid boundaries
         self.line_thickness = 0.002
         self.box_thickness = 10 * 0.001
-
+        # score variable to hold the score
         self.score = 0
 
     # A method for displaying the game grid
@@ -71,12 +69,13 @@ class GameGrid:
             stddraw.line(start_x, y, end_x, y)
         stddraw.setPenRadius()  # reset the pen radius to its default value
 
-    # A method to draw right panel
+    # A method to draw right panel, that contains score, controls and next piece
     def draw_right_panel(self):
-        # set pen color
+        # set pen color and draw the rectangle
         stddraw.setPenColor(Color(167, 160, 151))
         stddraw.filledRectangle(11.5, -0.5, 4, self.grid_height)
 
+        # writing the next and the score headers
         stddraw.setPenColor(Color(255, 255, 255))
         stddraw.setFontSize(35)
         stddraw.setFontFamily("Arial Bold")
@@ -85,18 +84,25 @@ class GameGrid:
         stddraw.setFontSize(40)
         stddraw.text(13.5, 17, str(self.score))
 
-        stddraw.setFontSize(20)
-        stddraw.text(13.5, 9.5, "Hard Drop = h")
-        stddraw.text(13.5, 10, "Pause Menu = p")
+        # writing the instructions onto the the right panel
+        stddraw.setFontSize(22)
+        stddraw.setFontFamily("Arial")
+        stddraw.text(13.5, 8.75, "Rotate = Space")
+        stddraw.text(13.5, 9.5, "Hard Drop = H")
+        stddraw.text(13.5, 10.25, "Pause Menu = P")
 
+        # drawing the next tetromino at the bottom right
         n = len(self.next_tetromino.tile_matrix)
 
         for row in range(n):
             for col in range(n):
                 if self.next_tetromino.tile_matrix[row][col] is not None:
+                    # getting the position of the cell
                     position = self.get_right_cell_position(row, col)
+                    # drawing it
                     self.next_tetromino.tile_matrix[row][col].draw(position)
 
+    # A method to get the position of the next tetromino to draw it
     def get_right_cell_position(self, row, col):
         n = len(self.tile_matrix)  # n = number of rows = number of columns
         position = Point()
@@ -178,27 +184,31 @@ class GameGrid:
 
             for col in range(self.grid_width):
                 for r in range(row, self.grid_height - 1):
+                    # drop the tiles
                     self.tile_matrix[r][col] = self.tile_matrix[r + 1][col]
 
     # A method to merge tiles vertically on the game grid and update the score
-    def merge_tiles(self):  # Access the global score variable
-        rows_to_clear = []  # Keep track of rows to clear
+    def merge_tiles(self):
 
+        # looping through the whole array
         for col in range(self.grid_width):
             for row in range(self.grid_height - 1):
+                # if the current and tile above it not none
                 if self.tile_matrix[row][col] is not None and self.tile_matrix[row + 1][col] is not None:
+                    # if the current and tile above is equal
                     if self.tile_matrix[row][col].number == self.tile_matrix[row + 1][col].number:
                         # Merge the tiles
                         self.tile_matrix[row][col].number *= 2
-
+                        # Make the above tile none
                         self.tile_matrix[row + 1][col] = None
+                        # a loop to drop the tiles above the merging
                         for r in range(row + 1, self.grid_height - 1):
                             if self.tile_matrix[r][col] is None:
                                 self.tile_matrix[r][col] = self.tile_matrix[r + 1][col]
                                 self.tile_matrix[r + 1][col] = None
 
                         merged_tile_num = self.tile_matrix[row][col].number
-                        # updating the background and background colors based on the number
+                        # updating the background and foreground colors based on the number
                         if merged_tile_num == 4:
                             self.tile_matrix[row][col].set_background_color(Color(236, 224, 200))
                         elif merged_tile_num == 8:
@@ -227,9 +237,6 @@ class GameGrid:
                             self.tile_matrix[row][col].set_foreground_color(Color(255, 255, 255))
                         elif merged_tile_num == 2048:
                             self.tile_matrix[row][col].set_background_color(Color(237, 198, 67))
-                            self.tile_matrix[row][col].set_foreground_color(Color(255, 255, 255))
-                        elif merged_tile_num == 4096:
-                            self.tile_matrix[row][col].set_background_color(Color(61, 58, 51))
                             self.tile_matrix[row][col].set_foreground_color(Color(255, 255, 255))
 
                         # Update score
