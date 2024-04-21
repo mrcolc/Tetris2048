@@ -56,16 +56,21 @@ def start():
     # the main game loop
     while True:
         # if the score
-        if grid.score > 2048:
-            condition = display_ending_menu(grid_h, grid_w, grid.score, "VICTORY!")
+        if grid.has_value(2048):
+            condition = display_ending_menu(grid_h, grid_w, grid.score, "VİCTORY!")
+            # if the condition is true that means restart the game is true
             if condition:
+                # restart the game procedures
                 is_paused = False
                 restart = False
+                # restarting the grid
                 current_tetromino, next_tetromino, grid = restart_the_grid(grid_h, grid_w, grid)
+                # displaying the game menu
                 display_game_menu(grid_h, grid_w)
                 game_over = False
                 stddraw.clearKeysTyped()
             else:
+                # exit the game
                 exit()
 
         # if the game is over

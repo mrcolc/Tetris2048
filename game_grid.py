@@ -241,3 +241,13 @@ class GameGrid:
 
                         # Update score
                         self.score += self.tile_matrix[row][col].number  # Example scoring mechanism
+
+
+    def has_value(self,value):
+        for col in range(self.grid_width):
+            for row in range(self.grid_height - 1):
+                if self.tile_matrix[row][col] is not None:
+                    num = self.tile_matrix[row][col].number 
+                    if num == value:
+                        return True
+        return False
