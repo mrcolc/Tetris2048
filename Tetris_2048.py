@@ -182,7 +182,6 @@ def display_victory_page(grid_h, grid_w):
                     # Restart the game
                     return True
 
-
 def restart_the_grid(grid_h, grid_w, grid):
     # Restart and remake ol the necessary variables 0 or starting position
     grid.score = 0
