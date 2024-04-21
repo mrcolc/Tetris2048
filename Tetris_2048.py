@@ -55,7 +55,7 @@ def start():
 
     # the main game loop
     while True:
-        # if the score
+
         if grid.score > 2048:
             condition = display_ending_menu(grid_h, grid_w, grid.score, "VICTORY!")
             if condition:
@@ -140,47 +140,6 @@ def start():
         grid.clear_rows()
 
 
-def display_victory_page(grid_h, grid_w):
-    background_color = Color(42, 69, 99)
-    button_color = Color(25, 255, 228)
-    text_color = Color(7, 5, 5)
-
-    # Clear the background drawing canvas to background_color
-    stddraw.clear(background_color)
-
-    # Center coordinates for displaying text and buttons
-    img_center_x, img_center_y = (grid_w + 3) / 2, grid_h - 7
-    button_w, button_h = grid_w - 1.5, 2
-
-    # Draw rectangles for buttons
-    stddraw.setPenColor(button_color)
-    button_blc_x, button_blc_y = img_center_x - button_w / 2, 4
-    stddraw.filledRectangle(button_blc_x, button_blc_y, button_w, button_h)
-
-    # Draw text on buttons
-    stddraw.setFontFamily("Arial")
-    stddraw.setFontSize(25)
-    stddraw.setPenColor(text_color)
-    text_to_display = "You Win!"
-    stddraw.text(img_center_x, 6, text_to_display)
-
-    text1_to_display = "Restart"
-    stddraw.text(img_center_x, 4, text1_to_display)
-
-    # User interaction loop
-    while True:
-        stddraw.show(50)
-
-        # Check if the mouse has been pressed
-        if stddraw.mousePressed():
-            # Get the coordinates of the mouse click
-            mouse_x, mouse_y = stddraw.mouseX(), stddraw.mouseY()
-
-            # Check if the mouse click is inside the button
-            if mouse_x >= button_blc_x and mouse_x < button_blc_x + button_w:
-                if mouse_y >= button_blc_y and mouse_y <= button_blc_y + button_h:
-                    # Restart the game
-                    return True
 
 def restart_the_grid(grid_h, grid_w, grid):
     # Restart and remake ol the necessary variables 0 or starting position

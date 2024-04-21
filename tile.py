@@ -29,6 +29,9 @@ class Tile:
     def set_background_color(self, color):
         self.background_color = color
 
+    def return_number(self):
+        return self.number
+
     # a method to change color of the foreground
     def set_foreground_color(self, color):
         self.foreground_color = color
