@@ -56,7 +56,7 @@ def start():
     # the main game loop
     while True:
         # if the score
-        if grid.has_value(16):
+        if grid.has_value(2048):
             condition = display_ending_menu(grid_h, grid_w, grid.score, "VİCTORY!")
             # if the condition is true that means restart the game is true
             if condition:
