@@ -189,7 +189,6 @@ class GameGrid:
 
     # A method to merge tiles vertically on the game grid and update the score
     def merge_tiles(self):
-
         # looping through the whole array
         for col in range(self.grid_width):
             for row in range(self.grid_height - 1):
@@ -203,7 +202,7 @@ class GameGrid:
                         self.tile_matrix[row + 1][col] = None
                         # a loop to drop the tiles above the merging
                         for r in range(row + 1, self.grid_height - 1):
-                            if self.tile_matrix[r][col] is None:
+                            if self.tile_matrix[r][col] is None and self.tile_matrix[r + 1][col] is not None:
                                 self.tile_matrix[r][col] = self.tile_matrix[r + 1][col]
                                 self.tile_matrix[r + 1][col] = None
 

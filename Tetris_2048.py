@@ -32,7 +32,7 @@ def start():
     # set the size of the drawing canvas (the displayed window)
     canvas_h, canvas_w = 40 * grid_h, 40 * grid_w + 110
     stddraw.setCanvasSize(canvas_w, canvas_h)
-    # set the scale of the coordinate system for the drawing canvas
+    # set the scale of the coordinate system for the drawing canvas+
     stddraw.setXscale(-0.5, grid_w - 0.5 + 4)
     stddraw.setYscale(-0.5, grid_h - 0.5)
 
@@ -271,7 +271,7 @@ def speed_selection_page(grid_height, grid_width):
             mouse_x, mouse_y = stddraw.mouseX(), stddraw.mouseY()
 
             if mouse_x >= button_blc_x and mouse_x < button_blc_x + button_w:
-                # if the slow is clicked
+                # if the fast is clicked
                 if mouse_y >= button_blc_y and mouse_y <= button_blc_y + button_h:
                     # adjusting the speed
                     speed_game = 50
@@ -284,7 +284,7 @@ def speed_selection_page(grid_height, grid_width):
                     # adjusting the speed
                     break
 
-            # if the fast is clicked
+            # if the slow is clicked
             if mouse_x >= button3_blc_x and mouse_x < button3_blc_x + button_w:
                 if mouse_y >= button3_blc_y and mouse_y <= button3_blc_y + button_h:
                     # adjusting the speed
